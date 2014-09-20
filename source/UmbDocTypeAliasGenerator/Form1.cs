@@ -79,9 +79,19 @@ namespace UmbDocTypeAliasGenerator
 
         private void GenerateSingleDocType(Type docType, ref StringBuilder codeBuilder, ref List<string> builtFields)
         {
+            var docAlias = "";
+            var docAttr = docType.GetCustomAttribute(typeof(Vega.USiteBuilder.DocumentTypeAttribute)) as Vega.USiteBuilder.DocumentTypeAttribute;
+            if (!String.IsNullOrWhiteSpace(docAttr.Alias))
+            {
+                docAlias = docAttr.Alias;
+            }
+            else
+            {
+                docAlias = docType.Name;
+            }
             codeBuilder.AppendLine();
             codeBuilder.AppendLine(String.Format("#region {0}", docType.Name));
-            codeBuilder.AppendLine(String.Format("public const string {0} = \"{0}\";", docType.Name));
+            codeBuilder.AppendLine(String.Format("public const string {0} = \"{1}\";", docType.Name, docAlias));
             codeBuilder.AppendLine();
 
             var baseDocType = docType.BaseType;
