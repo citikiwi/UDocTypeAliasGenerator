@@ -91,8 +91,18 @@ namespace UmbDocTypeAliasGenerator
                 var pname = p.Name;
                 if (!builtFields.Contains(pname))
                 {
+                    var palias = "";
+                    var pAttr = p.GetCustomAttribute(typeof(Vega.USiteBuilder.DocumentTypePropertyAttribute)) as Vega.USiteBuilder.DocumentTypePropertyAttribute;
+                    if (!String.IsNullOrWhiteSpace(pAttr.Alias))
+                    {
+                        palias = pAttr.Alias;
+                    }
+                    else
+                    {
+                        palias = pname[0].ToString().ToLower() + pname.Substring(1, pname.Length - 1);
+                    }
                     builtFields.Add(pname);
-                    codeBuilder.AppendLine(String.Format("public const string {0} = \"{1}\";", pname, pname[0].ToString().ToLower() + pname.Substring(1, pname.Length - 1)));
+                    codeBuilder.AppendLine(String.Format("public const string {0} = \"{1}\";", pname, palias));
                 }
             }
 
